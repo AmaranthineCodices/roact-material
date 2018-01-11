@@ -24,10 +24,6 @@ local RIPPLE_TRIGGER_INPUT_TYPES = {
 local Button = Roact.PureComponent:extend("MaterialButton")
 
 function Button:init(props)
-	if props.ZIndex and props.ZIndex == 1 and Configuration.Warnings.ButtonZIndex then
-		warn("RoactMaterial/Button: ZIndex is 1. Please re-examine your ZIndex hierarchy.")
-	end
-
 	self.state = {
 		_pressed = false;
 		_pressPoint = UDim2.new(0, 0, 0, 0);
@@ -58,61 +54,70 @@ function Button:willUnmount()
 end
 
 function Button:render()
-	local realZIndex = self.props.ZIndex ~= 2 and self.props.ZIndex or 2
-	local children = self.props[Roact.Children] or {}
 	local flat = self.props.Flat
 	local elevation = (flat and 0) or self.state.Elevation
 
-	children.Ink = Roact.createElement(Ink, {
-		ZIndex = realZIndex;
-		Rippling = self.state._pressed;
-		Origin = self.state._pressPoint;
-	})
-
-	children.Shadow = Roact.createElement(Shadow, {
-		Elevation = elevation;
-		ZIndex = realZIndex - 1;
-	})
-
-	return Roact.createElement("TextButton", {
-		AutoButtonColor = false;
-		BorderSizePixel = 0;
-		BackgroundColor3 = self.props.BackgroundColor3 or Color3.new(1, 1, 1);
-		Size = self.props.Size or UDim2.new(0, 100, 0, 40);
+	-- root is a dummy frame
+	return Roact.createElement("Frame", {
+		BackgroundTransparency = 1;
 		Position = self.props.Position or UDim2.new(0, 0, 0, 0);
-		Font = BUTTON_FONT;
-		TextSize = BUTTON_FONT_SIZE;
-		Text = self.props.Text and BUTTON_TEXT_SUBSTITUTION(self.props.Text) or "";
-		ZIndex = realZIndex;
+		AnchorPoint = self.props.AnchorPoint or Vector2.new(0, 0);
+		Size = self.props.Size or UDim2.new(0, 100, 0, 40);
+		ZIndex = self.props.ZIndex or 1;
+	}, {
+		Roact.createElement("TextButton", {
+			AutoButtonColor = false;
+			BorderSizePixel = 0;
+			BackgroundColor3 = self.props.BackgroundColor3 or Color3.new(1, 1, 1);
+			Size = UDim2.new(1, 0, 1, 0);
+			Position = self.state._mouseOver and UDim2.new(0, 0, 0, -1) or UDim2.new(0, 0, 0, 0);
+			Font = BUTTON_FONT;
+			TextSize = BUTTON_FONT_SIZE;
+			Text = self.props.Text and BUTTON_TEXT_SUBSTITUTION(self.props.Text) or "";
+			ZIndex = 2;
 
-		[Roact.Event.InputBegan] = function(rbx, input)
-			for _, allowed in ipairs(RIPPLE_TRIGGER_INPUT_TYPES) do
-				if input.UserInputType == allowed then
-					local relativeX = (input.Position.X - rbx.AbsolutePosition.X) / rbx.AbsoluteSize.X
-					local relativeY = (input.Position.Y - rbx.AbsolutePosition.Y) / rbx.AbsoluteSize.Y
+			[Roact.Event.InputBegan] = function(rbx, input)
+				for _, allowed in ipairs(RIPPLE_TRIGGER_INPUT_TYPES) do
+					if input.UserInputType == allowed then
+						local relativeX = (input.Position.X - rbx.AbsolutePosition.X) / rbx.AbsoluteSize.X
+						local relativeY = (input.Position.Y - rbx.AbsolutePosition.Y) / rbx.AbsoluteSize.Y
 
-					self:setState({
-						_pressPoint = UDim2.new(relativeX, 0, relativeY, 0);
-						_pressed = true;
-					})
+						self:setState({
+							_pressPoint = UDim2.new(relativeX, 0, relativeY, 0);
+							_pressed = true;
+						})
 
-					break
+						break
+					end
 				end
+			end;
+
+			[Roact.Event.MouseEnter] = function()
+				self:setState({
+					Elevation = 4;
+					_mouseOver = true;
+				})
+			end;
+
+			[Roact.Event.MouseLeave] = function()
+				self:setState({
+					Elevation = 2;
+					_mouseOver = false;
+				})
 			end
-		end;
+		}, self.props[Roact.Children]);
 
-		[Roact.Event.MouseEnter] = function()
-			self:setState({
-				Elevation = 4;
-			})
-		end;
+		Ink = Roact.createElement(Ink, {
+			ZIndex = 3;
+			Rippling = self.state._pressed;
+			Origin = self.state._pressPoint;
+		});
 
-		[Roact.Event.MouseLeave] = function()
-			self:setState({
-				Elevation = 2;
-			})
-		end
-	}, children)
+		Shadow = Roact.createElement(Shadow, {
+			Elevation = elevation;
+			ZIndex = 1;
+		});
+	})
 end
 
 return Button
