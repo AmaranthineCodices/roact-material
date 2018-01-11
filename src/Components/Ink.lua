@@ -34,6 +34,7 @@ function Ink:render()
 		Size = self.props.Size or UDim2.new(1, 0, 1, 0);
 		AnchorPoint = self.props.AnchorPoint or Vector2.new(0.5, 0.5);
 		Position = self.props.Position or UDim2.new(0.5, 0, 0.5, 0);
+		ZIndex = self.props.ZIndex or 1;
 
 		[Roact.Ref] = function(rbx)
 			self._container = rbx
@@ -47,7 +48,6 @@ function Ink:render()
 			Size = rippleSize;
 			Position = self.props.Origin or UDim2.new(0.5, 0, 0.5, 0);
 			AnchorPoint = Vector2.new(0.5, 0.5);
-			ZIndex = self.props.ZIndex or 1;
 
 			[Roact.Ref] = function(rbx)
 				self._rbx = rbx

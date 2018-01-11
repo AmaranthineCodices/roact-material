@@ -187,7 +187,7 @@ local SHADOW_TWEEN_INFO = TweenInfo.new(
 	Enum.EasingStyle.Linear
 )
 
-local function CreateShadowsForElevation(elevation, zIndex)
+local function CreateShadowsForElevation(elevation)
 	local elevationSettings = SHADOW_SETTINGS[elevation]
 	local shadows = {}
 
@@ -203,7 +203,6 @@ local function CreateShadowsForElevation(elevation, zIndex)
 			Position = UDim2.new(0.5, 0, 0.5, 0) + (settings.Offset or UDim2.new(0, 0, 0, 0));
 			ScaleType = Enum.ScaleType.Slice;
 			SliceCenter = Rect.new(10, 10, 118, 118);
-			ZIndex = zIndex;
 		})
 
 		shadows[key] = image
@@ -227,7 +226,8 @@ function Shadow:render()
 		[Roact.Ref] = function(rbx)
 			self._rbx = rbx
 		end;
-	}, CreateShadowsForElevation(self.props.Elevation, self.props.ZIndex or 1))
+		ZIndex = self.props.ZIndex or 1;
+	}, CreateShadowsForElevation(self.props.Elevation))
 end
 
 function Shadow:willUpdate(nextProps, nextState)

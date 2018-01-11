@@ -36,7 +36,9 @@ table.insert(elevationFrames, Roact.createElement("UIGridLayout", {
     VerticalAlignment = Enum.VerticalAlignment.Center;
 }))
 
-local test = Roact.createElement("ScreenGui", {}, {
+local test = Roact.createElement("ScreenGui", {
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+}, {
     Roact.createElement("Frame", {
         Size = UDim2.new(1, 0, 1, 0);
         BackgroundColor3 = Color3.new(1, 1, 1);
