@@ -1,0 +1,14 @@
+{
+	"name": "roact-material",
+	"servePort": 8000,
+	"partitions": {
+		"roact-material": {
+			"path": "src",
+			"target": "ReplicatedStorage.RoactMaterial"
+		},
+		"examples": {
+			"path": "examples",
+			"target": "StarterPlayer.StarterPlayerScripts"
+		}
+	}
+}
