@@ -18,7 +18,12 @@ stds.roblox = {
 		"CFrame",
 		"Enum",
         "Instance",
-        "TweenInfo"
+        "TweenInfo",
+
+		math = {
+			-- Roblox adds math.clamp and math.noise
+			fields = { "clamp", "noise" }
+		}
 	}
 }
 
