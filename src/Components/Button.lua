@@ -98,12 +98,9 @@ function Button:render()
 		Roact.createElement("TextButton", {
 			AutoButtonColor = false;
 			BorderSizePixel = 0;
-			BackgroundColor3 = self.props.BackgroundColor3 or ThemeAccessor.Get(self, "PrimaryColor", Color3.new(1, 1, 1));
+			BackgroundColor3 = self.props.BackgroundColor3 or (self.props.Flat and ThemeAccessor.Get(self, "FlatButtonColor", Color3.new(1, 1, 1)) or ThemeAccessor.Get(self, "ButtonColor", Color3.new(1, 1, 1)));
 			Size = UDim2.new(1, 0, 1, 0);
-			Font = BUTTON_FONT;
-			TextSize = BUTTON_FONT_SIZE;
-			Text = self.props.Text and BUTTON_TEXT_SUBSTITUTION(self.props.Text) or "";
-			TextColor3 = self.props.TextColor3 or ThemeAccessor.Get(self, "TextColor", Color3.new(0, 0, 0));
+			Text = "";
 			ZIndex = 2;
 
 			[Roact.Ref] = function(rbx)
@@ -153,6 +150,16 @@ function Button:render()
 			Elevation = elevation;
 			ZIndex = 1;
 		});
+
+		TextLabel = Roact.createElement("TextLabel", {
+			BackgroundTransparency = 1;
+			Font = BUTTON_FONT;
+			Size = UDim2.new(1, 0, 1, 0);
+			Text = self.props.Text and BUTTON_TEXT_SUBSTITUTION(self.props.Text) or "";
+			TextColor3 = self.props.TextColor3 or ThemeAccessor.Get(self, "TextColor", Color3.new(0, 0, 0));
+			TextSize = BUTTON_FONT_SIZE;
+			ZIndex = 4;
+		})
 	})
 end
 
