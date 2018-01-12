@@ -9,11 +9,20 @@ local test = Roact.createElement("ScreenGui", {
         BackgroundColor3 = Color3.new(1, 1, 1);
         BorderSizePixel = 0;
     }, {
-        Button = Roact.createElement(RoactMaterial.Button, {
+        RaisedButton = Roact.createElement(RoactMaterial.Button, {
             Text = "Raised";
             Position = UDim2.new(0.5, 0, 0.5, 0);
             AnchorPoint = Vector2.new(0.5, 0.5);
-        })
+            HoverColor3 = Color3.new(1, 1, 1);
+        });
+
+        FlatButton = Roact.createElement(RoactMaterial.Button, {
+            Text = "Flat";
+            Position = UDim2.new(0.5, 0, 0.5, 60);
+            AnchorPoint = Vector2.new(0.5, 0.5);
+            HoverColor3 = Color3.new(1, 0.9, 0.9);
+            Flat = true;
+        });
     })
 })
 

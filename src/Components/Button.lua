@@ -1,6 +1,7 @@
 -- Material design button.
 -- RoactMaterial does not implement floating action buttons, so they are not shown here.
 
+local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 -- Import configuration; gives access to Roact library.
@@ -21,13 +22,18 @@ local RIPPLE_TRIGGER_INPUT_TYPES = {
 	Enum.UserInputType.Touch
 }
 
+local COLOR_TWEEN_INFO = TweenInfo.new(
+	0.15,
+	Enum.EasingStyle.Linear
+)
+
 local Button = Roact.PureComponent:extend("MaterialButton")
 
 function Button:init(props)
 	self.state = {
 		_pressed = false;
 		_pressPoint = UDim2.new(0, 0, 0, 0);
-		Elevation = 2
+		Elevation = 2;
 	}
 
 	self._lastInputEvent = tick()
@@ -53,6 +59,26 @@ function Button:willUnmount()
 	end
 end
 
+function Button:willUpdate(nextProps, nextState)
+	-- only change if we altered the mouse over state
+	if self._lastMouseOver == nextState._mouseOver then return end
+	self._lastMouseOver = nextState._mouseOver
+
+	-- What's the goal color?
+	-- TODO: theme integration
+	local goalColor = nextState._mouseOver and nextProps.HoverColor3 or (nextProps.BackgroundColor3 or Color3.new(1, 1, 1))
+
+	if self._currentTween then
+		self._currentTween:Cancel()
+	end
+
+	local tween = TweenService:Create(self._rbx, COLOR_TWEEN_INFO, { BackgroundColor3 = goalColor })
+	tween:Play()
+
+	self._currentTween = tween
+	tween.Completed:Wait()
+end
+
 function Button:render()
 	local flat = self.props.Flat
 	local elevation = (flat and 0) or self.state.Elevation
@@ -70,11 +96,15 @@ function Button:render()
 			BorderSizePixel = 0;
 			BackgroundColor3 = self.props.BackgroundColor3 or Color3.new(1, 1, 1);
 			Size = UDim2.new(1, 0, 1, 0);
-			Position = self.state._mouseOver and UDim2.new(0, 0, 0, -1) or UDim2.new(0, 0, 0, 0);
+			Position = (not self.props.Flat and self.state._mouseOver) and UDim2.new(0, 0, 0, -1) or UDim2.new(0, 0, 0, 0);
 			Font = BUTTON_FONT;
 			TextSize = BUTTON_FONT_SIZE;
 			Text = self.props.Text and BUTTON_TEXT_SUBSTITUTION(self.props.Text) or "";
 			ZIndex = 2;
+
+			[Roact.Ref] = function(rbx)
+				self._rbx = rbx
+			end;
 
 			[Roact.Event.InputBegan] = function(rbx, input)
 				for _, allowed in ipairs(RIPPLE_TRIGGER_INPUT_TYPES) do
