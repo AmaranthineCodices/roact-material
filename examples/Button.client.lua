@@ -1,8 +1,12 @@
 local Roact = require(game.ReplicatedStorage.Roact)
 local RoactMaterial = require(game.ReplicatedStorage.RoactMaterial)
 
-local test = Roact.createElement("ScreenGui", {
-    ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+local test = Roact.createElement(RoactMaterial.ThemeProvider, {
+    Theme = RoactMaterial.Themes.Light;
+    ComponentProperties = {
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    };
+    Component = "ScreenGui";
 }, {
     Roact.createElement("Frame", {
         Size = UDim2.new(1, 0, 1, 0);

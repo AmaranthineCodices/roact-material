@@ -10,6 +10,7 @@ local Roact = Configuration.Roact
 
 local Shadow = require(script.Parent.Shadow)
 local Ink = require(script.Parent.Ink)
+local ThemeAccessor = require(script.Parent.Parent.Utility.ThemeAccessor)
 
 local BUTTON_FONT = Enum.Font.SourceSansSemibold
 local BUTTON_FONT_SIZE = 14
@@ -60,13 +61,15 @@ function Button:willUnmount()
 end
 
 function Button:willUpdate(nextProps, nextState)
-	-- only change if we altered the mouse over state
-	if self._lastMouseOver == nextState._mouseOver then return end
-	self._lastMouseOver = nextState._mouseOver
+	local goalColor
 
-	-- What's the goal color?
-	-- TODO: theme integration
-	local goalColor = nextState._mouseOver and nextProps.HoverColor3 or (nextProps.BackgroundColor3 or Color3.new(1, 1, 1))
+	if nextState._pressed then
+		goalColor = self.props.BackgroundColor3 or ThemeAccessor.Get(self, self.props.Flat and "FlatButtonPressColor" or "ButtonPressColor", Color3.new(0.9, 0.9, 0.9))
+	elseif nextState._mouseOver then
+		goalColor = self.props.BackgroundColor3 or ThemeAccessor.Get(self, self.props.Flat and "FlatButtonHoverColor" or "ButtonHoverColor", Color3.new(1, 1, 1))
+	else
+		goalColor = self.props.BackgroundColor3 or ThemeAccessor.Get(self, self.props.Flat and "FlatButtonColor" or "ButtonColor", Color3.new(1, 1, 1))
+	end
 
 	if self._currentTween then
 		self._currentTween:Cancel()
@@ -76,7 +79,8 @@ function Button:willUpdate(nextProps, nextState)
 	tween:Play()
 
 	self._currentTween = tween
-	tween.Completed:Wait()
+	-- DO NOT WAIT
+	-- Causes issues with render dispatch
 end
 
 function Button:render()
@@ -94,12 +98,12 @@ function Button:render()
 		Roact.createElement("TextButton", {
 			AutoButtonColor = false;
 			BorderSizePixel = 0;
-			BackgroundColor3 = self.props.BackgroundColor3 or Color3.new(1, 1, 1);
+			BackgroundColor3 = self.props.BackgroundColor3 or ThemeAccessor.Get(self, "PrimaryColor", Color3.new(1, 1, 1));
 			Size = UDim2.new(1, 0, 1, 0);
-			Position = (not self.props.Flat and self.state._mouseOver) and UDim2.new(0, 0, 0, -1) or UDim2.new(0, 0, 0, 0);
 			Font = BUTTON_FONT;
 			TextSize = BUTTON_FONT_SIZE;
 			Text = self.props.Text and BUTTON_TEXT_SUBSTITUTION(self.props.Text) or "";
+			TextColor3 = self.props.TextColor3 or ThemeAccessor.Get(self, "TextColor", Color3.new(0, 0, 0));
 			ZIndex = 2;
 
 			[Roact.Ref] = function(rbx)
@@ -141,6 +145,8 @@ function Button:render()
 			ZIndex = 3;
 			Rippling = self.state._pressed;
 			Origin = self.state._pressPoint;
+			InkColor3 = self.props.Flat and ThemeAccessor.Get(self, "PrimaryColor") or Color3.new(1, 1, 1);
+			InkTransparency = 0.5;
 		});
 
 		Shadow = Roact.createElement(Shadow, {

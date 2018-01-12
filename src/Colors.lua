@@ -306,7 +306,7 @@ end
 
 function Colors.Offset(color, steps)
 	local level = tonumber(color:match("(%d+)$"))
-	local name = color:match("^(%w+)")
+	local name = color:match("^(%a+)")
 	local isAccent = IsAccent(color)
 
 	local newLevel
@@ -325,11 +325,11 @@ function Colors.Offset(color, steps)
 end
 
 function Colors.Lighten(color, steps)
-	return Colors.Offset(color, steps)
+	return Colors.Offset(color, -steps)
 end
 
 function Colors.Darken(color, steps)
-	return Colors.Offset(color, -steps)
+	return Colors.Offset(color, steps)
 end
 
 return Colors
