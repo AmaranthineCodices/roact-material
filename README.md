@@ -53,15 +53,15 @@ The biggest caveat with using RoactMaterial is that you **must** use [ZIndexBeha
   - [ ] Error states
 - [ ] Toolbar
 - [ ] Tooltip
-- [ ] Typography
-    - [ ] Body 1
-    - [ ] Body 2
-    - [ ] Button
-    - [ ] Caption
-    - [ ] Display 1
-    - [ ] Display 2
-    - [ ] Display 3
-    - [ ] Display 4
-    - [ ] Headline
-    - [ ] Subheading
-    - [ ] Title
+- [x] Typography
+    - [x] Body 1
+    - [x] Body 2
+    - [x] Button
+    - [x] Caption
+    - [x] Display 1
+    - [x] Display 2
+    - [x] Display 3
+    - [x] Display 4
+    - [x] Headline
+    - [x] Subheading
+    - [x] Title

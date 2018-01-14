@@ -10,6 +10,7 @@ local Roact = Configuration.Roact
 
 local Shadow = require(script.Parent.Shadow)
 local Ink = require(script.Parent.Ink)
+local TextView = require(script.Parent.TextView)
 local ThemeAccessor = require(script.Parent.Parent.Utility.ThemeAccessor)
 
 local BUTTON_FONT = Enum.Font.SourceSansSemibold
@@ -151,13 +152,10 @@ function Button:render()
 			ZIndex = 1;
 		});
 
-		TextLabel = Roact.createElement("TextLabel", {
-			BackgroundTransparency = 1;
-			Font = BUTTON_FONT;
+		TextLabel = Roact.createElement(TextView, {
+			Class = "Button";
 			Size = UDim2.new(1, 0, 1, 0);
 			Text = self.props.Text and BUTTON_TEXT_SUBSTITUTION(self.props.Text) or "";
-			TextColor3 = self.props.TextColor3 or ThemeAccessor.Get(self, "TextColor", Color3.new(0, 0, 0));
-			TextSize = BUTTON_FONT_SIZE;
 			ZIndex = 4;
 		})
 	})
