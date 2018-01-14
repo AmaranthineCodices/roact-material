@@ -13,8 +13,6 @@ local Ink = require(script.Parent.Ink)
 local TextView = require(script.Parent.TextView)
 local ThemeAccessor = require(script.Parent.Parent.Utility.ThemeAccessor)
 
-local BUTTON_FONT = Enum.Font.SourceSansSemibold
-local BUTTON_FONT_SIZE = 14
 local BUTTON_TEXT_SUBSTITUTION = string.upper
 
 local RIPPLE_TRIGGER_INPUT_TYPES = {
