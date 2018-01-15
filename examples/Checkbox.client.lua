@@ -15,7 +15,7 @@ local test = Roact.createElement(RoactMaterial.ThemeProvider, {
     }, {
         Roact.createElement("UIGridLayout", {
             CellSize = UDim2.new(0, 24, 0, 24);
-            CellPadding = UDim2.new(0, 10, 0,1025);
+            CellPadding = UDim2.new(0, 10, 0, 10);
             HorizontalAlignment = Enum.HorizontalAlignment.Center;
             VerticalAlignment = Enum.VerticalAlignment.Center;
         });
