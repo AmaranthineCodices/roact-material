@@ -11,6 +11,11 @@ local LightTheme = {
     FlatButtonPressColor = Colors.Lighten("Blue400", 3);
     FlatButtonColor = Colors.White;
     ButtonColor = Colors.Blue400;
+
+    CheckOutlineColor = {
+        Color = Colors.Black;
+        Transparency = 0.46;
+    };
 }
 
 setmetatable(LightTheme, { __index = BaseTheme })
