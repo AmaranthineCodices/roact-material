@@ -14,13 +14,14 @@ The biggest caveat with using RoactMaterial is that you **must** use [ZIndexBeha
 - [ ] Examples
 - [ ] Theming via context API
 - [ ] Expose all the styling things
+- [ ] Dark theme
 
 ### Components
 
 - [ ] Boolean input
-    - [ ] Checkbox
+    - [x] Checkbox
     - [ ] Radio
-    - [ ] Switch
+    - [x] Switch
 - [ ] Bottom nav
 - [ ] Bottom sheet
 - [x] Button
