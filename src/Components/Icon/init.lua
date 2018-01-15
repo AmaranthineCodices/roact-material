@@ -42,7 +42,16 @@ local function ClosestResolution(icon, goalResolution)
     return closest
 end
 
-local function Icon(props)
+local Icon = {}
+
+Icon.GetIconInformation = function(iconName, resolution)
+    local icon = Spritesheet[iconName]
+    local variant = icon[resolution]
+
+    return Vector2.new(variant.X, variant.Y), Vector2.new(variant.Size, variant.Size), SHEET_ASSETS[variant.Sheet]
+end
+
+Icon.Icon = function(props)
     local iconName = props.Icon
     local icon = Spritesheet[iconName]
 
@@ -68,6 +77,10 @@ local function Icon(props)
         ImageRectSize = Vector2.new(variant.Size, variant.Size);
         ImageRectOffset = Vector2.new(variant.X, variant.Y);
         ImageColor3 = props.IconColor3;
+        ImageTransparency = props.IconTransparency;
+        Size = props.Size;
+        Position = props.Position;
+        AnchorPoint = props.AnchorPoint;
     })
 end
 
