@@ -3,7 +3,7 @@ local RoactMaterial = require(game.ReplicatedStorage.RoactMaterial)
 
 local icons = {
     Roact.createElement("UIGridLayout", {
-        CellSize = UDim2.new(0, 24, 0, 24);
+        CellSize = UDim2.new(0, 18, 0, 18);
         CellPadding = UDim2.new(0, 10, 0, 10);
         SortOrder = Enum.SortOrder.Name;
     });
@@ -13,9 +13,8 @@ local count = 0
 for icon in pairs(require(game.ReplicatedStorage.RoactMaterial.Components.Icon.Spritesheets)) do
     icons[icon] = Roact.createElement(RoactMaterial.Icon, {
         Icon = icon;
-        Size = UDim2.new(0, 24, 0, 24);
+        Size = UDim2.new(0, 18, 0, 18);
         IconColor3 = Color3.new(0, 0, 0);
-        Resolution = icon[24] and 24 or nil;
     })
 
     count = count + 1

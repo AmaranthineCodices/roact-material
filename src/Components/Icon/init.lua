@@ -31,7 +31,9 @@ local function ClosestResolution(icon, goalResolution)
     local closestDelta = math.huge
 
     for resolution in pairs(icon) do
-        if math.abs(resolution - goalResolution) < closestDelta then
+        if goalResolution % resolution == 0 or resolution % goalResolution == 0 then
+            return resolution
+        elseif math.abs(resolution - goalResolution) < closestDelta then
             closest = resolution
             closestDelta = math.abs(resolution - goalResolution)
         end
@@ -53,7 +55,7 @@ local function Icon(props)
             chosenResolution = ClosestResolution(icon, math.huge)
         -- Otherwise, best-guess it from the element's size
         else
-            assert(props.Size.X.Offset == props.Size.Y.Offset, "If using offset; Icon size must result in a square")
+            assert(props.Size.X.Offset == props.Size.Y.Offset, "If using offset Icon size must result in a square")
             chosenResolution = ClosestResolution(icon, props.Size.X.Offset)
         end
     end
