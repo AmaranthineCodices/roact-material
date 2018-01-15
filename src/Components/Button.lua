@@ -1,12 +1,12 @@
 -- Material design button.
 -- RoactMaterial does not implement floating action buttons, so they are not shown here.
 
-local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 -- Import configuration; gives access to Roact library.
 local Configuration = require(script.Parent.Parent.Configuration)
 local Roact = Configuration.Roact
+local RoactAnimate = Configuration.RoactAnimate
 
 local Shadow = require(script.Parent.Shadow)
 local Ink = require(script.Parent.Ink)
@@ -34,6 +34,8 @@ function Button:init(props)
 		_pressed = false;
 		_pressPoint = UDim2.new(0, 0, 0, 0);
 		Elevation = 2;
+		_mouseOver = false;
+		_bgColor = RoactAnimate.Value.new(self.props.BackgroundColor3 or (self.props.Flat and ThemeAccessor.Get(self, "FlatButtonColor", Color3.new(1, 1, 1)) or ThemeAccessor.Get(self, "ButtonColor", Color3.new(1, 1, 1))));
 	}
 
 	self._lastInputEvent = tick()
@@ -70,16 +72,7 @@ function Button:willUpdate(nextProps, nextState)
 		goalColor = self.props.BackgroundColor3 or ThemeAccessor.Get(self, self.props.Flat and "FlatButtonColor" or "ButtonColor", Color3.new(1, 1, 1))
 	end
 
-	if self._currentTween then
-		self._currentTween:Cancel()
-	end
-
-	local tween = TweenService:Create(self._rbx, COLOR_TWEEN_INFO, { BackgroundColor3 = goalColor })
-	tween:Play()
-
-	self._currentTween = tween
-	-- DO NOT WAIT
-	-- Causes issues with render dispatch
+	RoactAnimate(self.state._bgColor, COLOR_TWEEN_INFO, goalColor):Start()
 end
 
 function Button:render()
@@ -94,10 +87,10 @@ function Button:render()
 		Size = self.props.Size or UDim2.new(0, 100, 0, 40);
 		ZIndex = self.props.ZIndex or 1;
 	}, {
-		Roact.createElement("TextButton", {
+		Roact.createElement(RoactAnimate.TextButton, {
 			AutoButtonColor = false;
 			BorderSizePixel = 0;
-			BackgroundColor3 = self.props.BackgroundColor3 or (self.props.Flat and ThemeAccessor.Get(self, "FlatButtonColor", Color3.new(1, 1, 1)) or ThemeAccessor.Get(self, "ButtonColor", Color3.new(1, 1, 1)));
+			BackgroundColor3 = self.state._bgColor;
 			Size = UDim2.new(1, 0, 1, 0);
 			Text = "";
 			ZIndex = 2;

@@ -1,10 +1,9 @@
 -- Material design ink ripple component.
 
-local TweenService = game:GetService("TweenService")
-
 -- Import configuration; gives access to Roact library.
 local Configuration = require(script.Parent.Parent.Configuration)
 local Roact = Configuration.Roact
+local RoactAnimate = Configuration.RoactAnimate
 
 local RIPPLE_IMAGE = "rbxassetid://1318074921"
 local RIPPLE_TWEEN_INFO = TweenInfo.new(
@@ -15,19 +14,16 @@ local RIPPLE_TWEEN_INFO = TweenInfo.new(
 
 local RIPPLE_MAX_SIZE = UDim2.new(2, 0, 2, 0)
 
--- Cannot be PureComponent; causes bizarre bugs.
-local Ink = Roact.Component:extend("MaterialInk")
+local Ink = Roact.PureComponent:extend("MaterialInk")
 
 function Ink:init(props)
 	self.state = {
-		Rippling = props.Rippling or false
+		_transparency = RoactAnimate.Value.new(1);
+		_size = RoactAnimate.Value.new(UDim2.new(0, 0, 0, 0));
 	}
 end
 
 function Ink:render()
-	local rippleSize = self.state.Rippling and RIPPLE_MAX_SIZE or UDim2.new(0, 0, 0, 0)
-	local rippleTransparency = self.state.Rippling and (self.props.InkTransparency or 0.5) or 1
-
 	return Roact.createElement("Frame", {
 		BackgroundTransparency = 1;
 		ClipsDescendants = true;
@@ -40,12 +36,12 @@ function Ink:render()
 			self._container = rbx
 		end
 	}, {
-		Rippler = Roact.createElement("ImageLabel", {
+		Rippler = Roact.createElement(RoactAnimate.ImageLabel, {
 			BackgroundTransparency = 1;
 			Image = RIPPLE_IMAGE;
 			ImageColor3 = self.props.InkColor3 or Color3.new(0.4, 0.4, 0.4);
-			ImageTransparency = rippleTransparency;
-			Size = rippleSize;
+			ImageTransparency = self.state._transparency;
+			Size = self.state._size;
 			Position = self.props.Origin or UDim2.new(0.5, 0, 0.5, 0);
 			AnchorPoint = Vector2.new(0.5, 0.5);
 
@@ -57,14 +53,8 @@ function Ink:render()
 end
 
 function Ink:willUpdate(nextProps, nextState)
-	local goalProps = {
-		Size = RIPPLE_MAX_SIZE;
-	}
-
-	-- Cancel the current tween, if it exists.
-	if self._currentTween then
-		self._currentTween:Cancel()
-	end
+	local goalSize = RIPPLE_MAX_SIZE
+	local goalTransparency = self.props.InkTransparency or 0.5
 
 	-- Before we start messing with size, we need to calculate the correct SizeConstraint.
 	-- If x size > y size, use SizeXX. Otherwise, use SizeYY.
@@ -85,21 +75,15 @@ function Ink:willUpdate(nextProps, nextState)
 
 		-- If the ink ripple was faded out, we'll need to reset it.
 		self._rbx.ImageTransparency = self.props.InkTransparency or 0.5
-
 	-- Otherwise, we're exiting the animation and we need to fade the ink ripple out.
 	else
-		goalProps.ImageTransparency = 1
+		goalTransparency = 1
 	end
 
-	-- Create the tween; usual stuff. _rbx is the ripple ImageLabel.
-	local tween = TweenService:Create(self._rbx, RIPPLE_TWEEN_INFO, goalProps)
-	tween:Play()
-
-	-- Bookkeeping; let the tween be interrupted.
-	self._currentTween = tween
-
-	-- Yield until the update is complete.
-	tween.Completed:Wait()
+	RoactAnimate.Parallel({
+		RoactAnimate(self.state._transparency, RIPPLE_TWEEN_INFO, goalTransparency),
+		RoactAnimate(self.state._size, RIPPLE_TWEEN_INFO, goalSize)
+	}):Start()
 end
 
 return Ink
