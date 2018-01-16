@@ -29,12 +29,12 @@ local Spritesheet = require(script.Spritesheets)
 
 local function ClosestResolution(icon, goalResolution)
     local closest = 0
-    local closestDelta = math.huge
+    local closestDelta = nil
 
     for resolution in pairs(icon) do
         if goalResolution % resolution == 0 or resolution % goalResolution == 0 then
             return resolution
-        elseif math.abs(resolution - goalResolution) < closestDelta then
+        elseif not closestDelta or math.abs(resolution - goalResolution) < closestDelta then
             closest = resolution
             closestDelta = math.abs(resolution - goalResolution)
         end

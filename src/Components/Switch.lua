@@ -1,4 +1,4 @@
--- Checkbox!
+-- Switch!
 
 local Configuration = require(script.Parent.Parent.Configuration)
 local Roact = Configuration.Roact
