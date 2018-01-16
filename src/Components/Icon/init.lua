@@ -1,5 +1,6 @@
 local Configuration = require(script.Parent.Parent.Configuration)
 local Roact = Configuration.Roact
+local RoactAnimate = Configuration.RoactAnimate
 
 local SHEET_ASSETS = {
     [1] = "rbxassetid://1330514658";
@@ -71,7 +72,7 @@ Icon.Icon = function(props)
 
     local variant = icon[chosenResolution]
 
-    return Roact.createElement("ImageLabel", {
+    return Roact.createElement(RoactAnimate.ImageLabel, {
         Image = SHEET_ASSETS[variant.Sheet];
         BackgroundTransparency = 1;
         ImageRectSize = Vector2.new(variant.Size, variant.Size);
