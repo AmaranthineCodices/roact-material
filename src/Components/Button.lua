@@ -77,6 +77,7 @@ end
 
 function Button:render()
 	local flat = self.props.Flat
+	local action = self.props.Action
 	local elevation = (flat and 0) or self.state.Elevation
 
 	-- root is a dummy frame
@@ -127,6 +128,12 @@ function Button:render()
 					Elevation = 2;
 					_mouseOver = false;
 				})
+			end;
+			
+			[Roact.Event.MouseButton1Click] = function() --action's will allow users to make it so when the button is pressed it will do something. (idea: later on make it so the user can pick the actionType and is not limited to just MouseButton1Click?)
+				if action then
+					action()
+				end
 			end
 		}, self.props[Roact.Children]);
 
