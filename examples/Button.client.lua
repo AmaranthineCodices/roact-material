@@ -17,6 +17,9 @@ local test = Roact.createElement(RoactMaterial.ThemeProvider, {
             Text = "Raised";
             Position = UDim2.new(0.5, 0, 0.5, 0);
             AnchorPoint = Vector2.new(0.5, 0.5);
+            Action = function() --now when the raised button is pressed it will print "I was clicked!"
+				print('I was clicked!')
+			end;
         });
 
         FlatButton = Roact.createElement(RoactMaterial.Button, {
@@ -24,6 +27,7 @@ local test = Roact.createElement(RoactMaterial.ThemeProvider, {
             Position = UDim2.new(0.5, 0, 0.5, 60);
             AnchorPoint = Vector2.new(0.5, 0.5);
             Flat = true;
+            -- The flat option has no action, so whenever you click it nothing will happen but the animation will run.
         });
     })
 })
