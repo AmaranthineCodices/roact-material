@@ -31,6 +31,8 @@ function TextView:render()
         TextStrokeColor3 = self.props.TextStrokeColor3;
         TextStrokeTransparency = self.props.TextStrokeTransparency;
         TextTransparency = self.props.TextTransparency;
+        TextXAlignment = self.props.TextXAlignment;
+        TextYAlignment = self.props.TextYAlignment;
         ZIndex = self.props.ZIndex;
     }, self.props[Roact.Children])
 end
