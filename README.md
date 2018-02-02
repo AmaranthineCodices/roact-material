@@ -16,6 +16,7 @@ The biggest caveat with using RoactMaterial is that you **must** use [ZIndexBeha
 - [ ] Expose all the styling things
 - [ ] Dark theme
 - [ ] Events on everything where it makes sense for them to be
+- [ ] Property type checking with [rbx-prop-types](https://github.com/AmaranthineCodices/rbx-prop-types)
 
 ### Components
 
