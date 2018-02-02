@@ -20,9 +20,9 @@ The biggest caveat with using RoactMaterial is that you **must** use [ZIndexBeha
 
 ### Components
 
-- [ ] Boolean input
+- [x] Boolean input
     - [x] Checkbox
-    - [ ] Radio
+    - [x] Radio
     - [x] Switch
 - [ ] Bottom nav
 - [ ] Bottom sheet
