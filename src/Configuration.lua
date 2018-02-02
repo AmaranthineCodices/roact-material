@@ -2,11 +2,11 @@
 -- Changing these settings affects the functioning of the entire library.
 
 local Configuration = {
-	-- The Roact library. Change this if you did not install Roact in ReplicatedStorage.
-	Roact = require(game:GetService("ReplicatedStorage"):WaitForChild("Roact"));
+	-- The Roact library.
+	Roact = require(script.Parent.Parent.Roact);
 
-	-- The RoactAnimate library. Change this if you did not install RoactAnimate in ReplicatedStorage.
-	RoactAnimate = require(game:GetService("ReplicatedStorage"):WaitForChild("RoactAnimate"));
+	-- The RoactAnimate library.
+	RoactAnimate = require(script.Parent.Parent.RoactAnimate);
 
 	-- Various warnings in the components.
 	Warnings = {};
