@@ -32,21 +32,26 @@ function RadioButton:willUpdate(nextProps, nextState)
     local newTransparency = 1
     local newOutlineTransparency = outlineColor.Transparency
 
-    if nextState.Checked then
+    if nextProps.Checked then
         newTransparency = 0
         newOutlineTransparency = 1
     end
 
-    RoactAnimate.Parallel({
+    local animations = {
         RoactAnimate(self.state._fillTransparency, TweenInfo.new(0.225), newTransparency),
         RoactAnimate(self.state._outlineTransparency, TweenInfo.new(0.225), newOutlineTransparency),
-        RoactAnimate.Sequence({
+    }
+
+    if nextProps.Checked ~= self.props.Checked and nextProps.Checked then
+        table.insert(animations, RoactAnimate.Sequence({
             RoactAnimate.Prepare(self.state._rippleSize, UDim2.new(0, 0, 0, 0)),
             RoactAnimate.Prepare(self.state._rippleTransparency, 0.6),
             RoactAnimate(self.state._rippleSize, TweenInfo.new(0.15), UDim2.new(1.75, 0, 1.75, 0)),
             RoactAnimate(self.state._rippleTransparency, TweenInfo.new(0.15), 1)
-        })
-    }):Start()
+        }))
+    end
+
+    RoactAnimate.Parallel(animations):Start()
 end
 
 function RadioButton:render()
@@ -66,7 +71,7 @@ function RadioButton:render()
 
             [Roact.Event.MouseButton1Click] = function(rbx)
                 if self.props.onChecked then
-                    self.props.onChecked(rbx)
+                    self.props.onChecked(rbx, self.props.Id)
                 end
 
                 self:setState({
