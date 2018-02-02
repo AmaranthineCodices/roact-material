@@ -15,6 +15,7 @@ The biggest caveat with using RoactMaterial is that you **must** use [ZIndexBeha
 - [ ] Theming via context API
 - [ ] Expose all the styling things
 - [ ] Dark theme
+- [ ] Events on everything where it makes sense for them to be
 
 ### Components
 
