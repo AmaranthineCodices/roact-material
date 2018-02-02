@@ -8,7 +8,7 @@
 		},
 		"examples": {
 			"path": "examples",
-			"target": "StarterPlayer.StarterPlayerScripts"
+			"target": "StarterPlayer.StarterPlayerScripts.RoactMaterialExamples"
 		}
 	}
 }
