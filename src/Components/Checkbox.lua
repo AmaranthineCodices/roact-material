@@ -15,11 +15,8 @@ local Checkbox = Roact.PureComponent:extend("MaterialCheckbox")
 
 local c = Roact.createElement
 
-local CHECK_OFFSET, CHECK_SIZE, CHECK_SHEET = Icon.GetIconInformation(CHECKED_ICON, 48)
-
 function Checkbox:init(props)
     self.state = {
-        Checked = props.Checked;
         _fillTransparency = RoactAnimate.Value.new(props.Checked and 0 or 1);
         _rippleSize = RoactAnimate.Value.new(UDim2.new(0, 0, 0, 0));
         _rippleTransparency = RoactAnimate.Value.new(0.6);
@@ -28,20 +25,23 @@ end
 
 function Checkbox:willUpdate(nextProps, nextState)
     local newTransparency = 1
+    local animations = {}
 
-    if nextState.Checked then
+    if nextProps.Checked then
         newTransparency = 0
+
+        if not self.props.Checked then
+            table.insert(animations, RoactAnimate.Sequence({
+                RoactAnimate.Prepare(self.state._rippleSize, UDim2.new(0, 0, 0, 0)),
+                RoactAnimate.Prepare(self.state._rippleTransparency, 0.6),
+                RoactAnimate(self.state._rippleSize, TweenInfo.new(0.15), UDim2.new(1.75, 0, 1.75, 0)),
+                RoactAnimate(self.state._rippleTransparency, TweenInfo.new(0.15), 1)
+            }))
+        end
     end
 
-    RoactAnimate.Parallel({
-        RoactAnimate(self.state._fillTransparency, TweenInfo.new(0.225), newTransparency),
-        RoactAnimate.Sequence({
-            RoactAnimate.Prepare(self.state._rippleSize, UDim2.new(0, 0, 0, 0)),
-            RoactAnimate.Prepare(self.state._rippleTransparency, 0.6),
-            RoactAnimate(self.state._rippleSize, TweenInfo.new(0.15), UDim2.new(1.75, 0, 1.75, 0)),
-            RoactAnimate(self.state._rippleTransparency, TweenInfo.new(0.15), 1)
-        })
-    }):Start()
+    table.insert(animations, RoactAnimate(self.state._fillTransparency, TweenInfo.new(0.225), newTransparency))
+    RoactAnimate.Parallel(animations):Start()
 end
 
 function Checkbox:render()
@@ -60,9 +60,7 @@ function Checkbox:render()
             Text = "";
 
             [Roact.Event.MouseButton1Click] = function(rbx)
-                self:setState({
-                    Checked = not self.state.Checked;
-                })
+                self.props.onChecked(not self.props.Checked)
             end;
         }, {
             c(Icon.Icon, {
@@ -72,15 +70,13 @@ function Checkbox:render()
                 IconColor3 = outlineColor.Color;
                 IconTransparency = outlineColor.Transparency;
             });
-            c(RoactAnimate.ImageLabel, {
-                BackgroundTransparency = 1;
+            c(Icon.Icon, {
+                Icon = CHECKED_ICON;
+                IconColor3 = ThemeAccessor.Get(self, "PrimaryColor");
+                IconTransparency = self.state._fillTransparency;
+                Resolution = 48;
                 Size = UDim2.new(1, 0, 1, 0);
-                Image = CHECK_SHEET;
                 ZIndex = 2;
-                ImageTransparency = self.state._fillTransparency;
-                ImageColor3 = ThemeAccessor.Get(self, "PrimaryColor");
-                ImageRectOffset = CHECK_OFFSET;
-                ImageRectSize = CHECK_SIZE;
             })
         });
         Ripple = c(RoactAnimate.ImageLabel, {
