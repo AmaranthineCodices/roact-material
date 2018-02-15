@@ -24,23 +24,23 @@ print(count)
 
 local test = Roact.createElement(RoactMaterial.ThemeProvider, {
     Theme = RoactMaterial.Themes.Light;
-    ComponentProperties = {
-        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    };
-    Component = "ScreenGui";
 }, {
-    Roact.createElement("Frame", {
-        Size = UDim2.new(1, 0, 1, 0);
-        BackgroundColor3 = Color3.new(1, 1, 1);
-        BorderSizePixel = 0;
+    Roact.createElement("ScreenGui", {
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
     }, {
-        Roact.createElement("ScrollingFrame", {
-            Size = UDim2.new(0.7, 0, 0.9, 0);
-            Position = UDim2.new(0.15, 0, 0.05, 0);
-            BackgroundTransparency = 1;
-            CanvasSize = UDim2.new(0, 0, 100, 0);
-            VerticalScrollBarInset = "Always";
-        }, icons);
+        Roact.createElement("Frame", {
+            Size = UDim2.new(1, 0, 1, 0);
+            BackgroundColor3 = Color3.new(1, 1, 1);
+            BorderSizePixel = 0;
+        }, {
+            Roact.createElement("ScrollingFrame", {
+                Size = UDim2.new(0.7, 0, 0.9, 0);
+                Position = UDim2.new(0.15, 0, 0.05, 0);
+                BackgroundTransparency = 1;
+                CanvasSize = UDim2.new(0, 0, 100, 0);
+                VerticalScrollBarInset = "Always";
+            }, icons);
+        })
     })
 })
 
