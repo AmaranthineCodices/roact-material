@@ -20,7 +20,7 @@ end
 
 function ThemeProvider:render()
     -- TODO: fragment API?
-    return Roact.createElement(self.props.Component, self.props.ComponentProperties, self.props[Roact.Children])
+    return Roact.oneChild(self.props[Roact.Children])
 end
 
 return ThemeProvider
