@@ -15,7 +15,6 @@ local c = Roact.createElement
 
 function Switch:init(props)
     self.state = {
-        Checked = props.Checked;
         _trackColor = RoactAnimate.Value.new(ThemeAccessor.Get(self, props.Checked and "SwitchTrackOnColor" or "SwitchTrackOffColor"));
         _toggleColor = RoactAnimate.Value.new(ThemeAccessor.Get(self, props.Checked and "SwitchToggleOnColor" or "SwitchToggleOffColor"));
         _togglePosition = RoactAnimate.Value.new(props.Checked and UDim2.new(1, -10, 0.5, 0) or UDim2.new(0, 10, 0.5, 0));
@@ -26,23 +25,26 @@ function Switch:init(props)
 end
 
 function Switch:willUpdate(nextProps, nextState)
-    local newTogglePosition = nextState.Checked and UDim2.new(1, -10, 0.5, 0) or UDim2.new(0, 10, 0.5, 0)
-    local newToggleColor = ThemeAccessor.Get(self, nextState.Checked and "SwitchToggleOnColor" or "SwitchToggleOffColor")
-    local newTrackColor = ThemeAccessor.Get(self, nextState.Checked and "SwitchTrackOnColor" or "SwitchTrackOffColor")
-    local newRippleColor = ThemeAccessor.Get(self, nextState.Checked and "SwitchRippleOnColor" or "SwitchRippleOffColor")
+    print(self.props.Checked, nextProps.Checked)
+    if self.props.Checked ~= nextProps.Checked then
+        local newTogglePosition = nextProps.Checked and UDim2.new(1, -10, 0.5, 0) or UDim2.new(0, 10, 0.5, 0)
+        local newToggleColor = ThemeAccessor.Get(self, nextProps.Checked and "SwitchToggleOnColor" or "SwitchToggleOffColor")
+        local newTrackColor = ThemeAccessor.Get(self, nextProps.Checked and "SwitchTrackOnColor" or "SwitchTrackOffColor")
+        local newRippleColor = ThemeAccessor.Get(self, nextProps.Checked and "SwitchRippleOnColor" or "SwitchRippleOffColor")
 
-    RoactAnimate.Parallel({
-        RoactAnimate(self.state._togglePosition, TweenInfo.new(0.225), newTogglePosition),
-        RoactAnimate(self.state._toggleColor, TweenInfo.new(0.225), newToggleColor),
-        RoactAnimate(self.state._trackColor, TweenInfo.new(0.225), newTrackColor),
-        RoactAnimate.Sequence({
-            RoactAnimate.Prepare(self.state._rippleSize, UDim2.new(0, 0, 0, 0)),
-            RoactAnimate.Prepare(self.state._rippleTransparency, 0.6),
-            RoactAnimate.Prepare(self.state._rippleColor, newRippleColor),
-            RoactAnimate(self.state._rippleSize, TweenInfo.new(0.15), UDim2.new(1.75, 0, 1.75, 0)),
-            RoactAnimate(self.state._rippleTransparency, TweenInfo.new(0.15), 1)
-        })
-    }):Start()
+        RoactAnimate.Parallel({
+            RoactAnimate(self.state._togglePosition, TweenInfo.new(0.225), newTogglePosition),
+            RoactAnimate(self.state._toggleColor, TweenInfo.new(0.225), newToggleColor),
+            RoactAnimate(self.state._trackColor, TweenInfo.new(0.225), newTrackColor),
+            RoactAnimate.Sequence({
+                RoactAnimate.Prepare(self.state._rippleSize, UDim2.new(0, 0, 0, 0)),
+                RoactAnimate.Prepare(self.state._rippleTransparency, 0.6),
+                RoactAnimate.Prepare(self.state._rippleColor, newRippleColor),
+                RoactAnimate(self.state._rippleSize, TweenInfo.new(0.15), UDim2.new(1.75, 0, 1.75, 0)),
+                RoactAnimate(self.state._rippleTransparency, TweenInfo.new(0.15), 1)
+            })
+        }):Start()
+    end
 end
 
 function Switch:render()
@@ -54,9 +56,7 @@ function Switch:render()
         ZIndex = self.props.ZIndex;
 
         [Roact.Event.MouseButton1Click] = function(rbx)
-            self:setState({
-                Checked = not self.state.Checked;
-            })
+            self.props.onChecked(not self.props.Checked)
         end;
     }, {
         Track = c(RoactAnimate.ImageLabel, {
