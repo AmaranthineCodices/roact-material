@@ -63,14 +63,14 @@ function Checkbox:render()
                 self.props.onChecked(not self.props.Checked)
             end;
         }, {
-            c(Icon.Icon, {
+            c(Icon, {
                 Size = UDim2.new(1, 0, 1, 0);
                 Resolution = 48;
                 Icon = UNCHECKED_ICON;
                 IconColor3 = outlineColor.Color;
                 IconTransparency = outlineColor.Transparency;
             });
-            c(Icon.Icon, {
+            c(Icon, {
                 Icon = CHECKED_ICON;
                 IconColor3 = ThemeAccessor.Get(self, "PrimaryColor");
                 IconTransparency = self.state._fillTransparency;

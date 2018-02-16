@@ -11,7 +11,7 @@ local icons = {
 
 local count = 0
 for icon in pairs(require(game.ReplicatedStorage.RoactMaterial.Components.Icon.Spritesheets)) do
-    icons[icon] = Roact.createElement(RoactMaterial.Icon.Icon, {
+    icons[icon] = Roact.createElement(RoactMaterial.Icon, {
         Icon = icon;
         Size = UDim2.new(0, 18, 0, 18);
         IconColor3 = Color3.new(0, 0, 0);

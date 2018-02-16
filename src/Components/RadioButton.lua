@@ -72,14 +72,14 @@ function RadioButton:render()
                 self.props.onClicked()
             end;
         }, {
-            c(Icon.Icon, {
+            c(Icon, {
                 Size = UDim2.new(1, 0, 1, 0);
                 Resolution = 48;
                 Icon = UNCHECKED_ICON;
                 IconColor3 = outlineColor.Color;
                 IconTransparency = self.state._outlineTransparency;
             });
-            c(Icon.Icon, {
+            c(Icon, {
                 BackgroundTransparency = 1;
                 Icon = CHECKED_ICON;
                 IconColor3 = ThemeAccessor.Get(self, "PrimaryColor");

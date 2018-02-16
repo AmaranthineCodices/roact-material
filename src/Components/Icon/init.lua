@@ -43,16 +43,7 @@ local function ClosestResolution(icon, goalResolution)
     return closest
 end
 
-local Icon = {}
-
-Icon.GetIconInformation = function(iconName, resolution)
-    local icon = Spritesheet[iconName]
-    local variant = icon[resolution]
-
-    return Vector2.new(variant.X, variant.Y), Vector2.new(variant.Size, variant.Size), SHEET_ASSETS[variant.Sheet]
-end
-
-Icon.Icon = function(props)
+local Icon = function(props)
     local iconName = props.Icon
     local icon = Spritesheet[iconName]
 
