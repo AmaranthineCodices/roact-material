@@ -19,7 +19,6 @@ function RadioButton:init(props)
     local outlineColor = ThemeAccessor.Get(self, "CheckOutlineColor")
 
     self.state = {
-        Checked = props.Checked;
         _fillTransparency = RoactAnimate.Value.new(props.Checked and 0 or 1);
         _outlineTransparency = RoactAnimate.Value.new(props.Checked and 1 or outlineColor.Transparency);
         _rippleSize = RoactAnimate.Value.new(UDim2.new(0, 0, 0, 0));
@@ -70,13 +69,7 @@ function RadioButton:render()
             Text = "";
 
             [Roact.Event.MouseButton1Click] = function(rbx)
-                if self.props.onChecked then
-                    self.props.onChecked(rbx, self.props.Id)
-                end
-
-                self:setState({
-                    Checked = true;
-                })
+                self.props.onClicked()
             end;
         }, {
             c(Icon.Icon, {
