@@ -40,8 +40,7 @@ function RadioGroup:render()
         }, {
             Roact.createElement(RadioButton, {
                 Checked = id == self.state.CurrentId;
-                Id = id;
-                onChecked = function(rbx)
+                onClicked = function()
                     if self.props.currentIdChanged then
                         self.props.currentIdChanged(id)
                     end
