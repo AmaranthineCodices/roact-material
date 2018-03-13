@@ -45,8 +45,8 @@ function RadioButton:willUpdate(nextProps, nextState)
         table.insert(animations, RoactAnimate.Sequence({
             RoactAnimate.Prepare(self.state._rippleSize, UDim2.new(0, 0, 0, 0)),
             RoactAnimate.Prepare(self.state._rippleTransparency, 0.6),
-            RoactAnimate(self.state._rippleSize, TweenInfo.new(0.15), UDim2.new(1.75, 0, 1.75, 0)),
-            RoactAnimate(self.state._rippleTransparency, TweenInfo.new(0.15), 1)
+            RoactAnimate(self.state._rippleSize, TweenInfo.new(0.25, Enum.EasingStyle.Sine), UDim2.new(1.75, 0, 1.75, 0)),
+            RoactAnimate(self.state._rippleTransparency, TweenInfo.new(.08, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), 1)
         }))
     end
 
