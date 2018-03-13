@@ -60,7 +60,9 @@ function Checkbox:render()
             Text = "";
 
             [Roact.Event.MouseButton1Click] = function(rbx)
-                self.props.onChecked(not self.props.Checked)
+                if self.props.onChecked then
+					self.props.onChecked(not self.props.Checked)
+				end;
             end;
         }, {
             c(Icon, {
