@@ -69,7 +69,9 @@ function RadioButton:render()
             Text = "";
 
             [Roact.Event.MouseButton1Click] = function(rbx)
-                self.props.onClicked()
+                if self.props.onClicked then
+					self.props.onClicked()
+			    end;
             end;
         }, {
             c(Icon, {
