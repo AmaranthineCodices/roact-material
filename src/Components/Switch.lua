@@ -56,7 +56,9 @@ function Switch:render()
         ZIndex = self.props.ZIndex;
 
         [Roact.Event.MouseButton1Click] = function(rbx)
-            self.props.onChecked(not self.props.Checked)
+            if self.props.onChecked then
+				self.props.onChecked(not self.props.Checked)
+			end;
         end;
     }, {
         Track = c(RoactAnimate.ImageLabel, {
