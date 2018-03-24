@@ -1,0 +1,6 @@
+[submodule "lib/Roact"]
+	path = lib/Roact
+	url = https://github.com/Roblox/Roact
+[submodule "lib/RoactAnimate"]
+	path = lib/RoactAnimate
+	url = https://github.com/AmaranthineCodices/Roact-Animate

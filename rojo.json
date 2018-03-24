@@ -6,6 +6,14 @@
 			"path": "src",
 			"target": "ReplicatedStorage.RoactMaterial"
 		},
+		"roact": {
+			"path": "lib/Roact/lib",
+			"target": "ReplicatedStorage.Roact"
+		},
+		"roact-animate": {
+			"path": "lib/RoactAnimate/src",
+			"target": "ReplicatedStorage.RoactAnimate"
+		},
 		"examples": {
 			"path": "examples",
 			"target": "StarterPlayer.StarterPlayerScripts.RoactMaterialExamples"
