@@ -1,11 +1,10 @@
 -- Material design shadow component.
 -- Uses square blurs, not rounded ones. RoactMaterial does not use rounded corners.
 
-local TweenService = game:GetService("TweenService")
-
 -- Import configuration; gives access to Roact library.
 local Configuration = require(script.Parent.Parent.Configuration)
 local Roact = Configuration.Roact
+local RoactAnimate = Configuration.RoactAnimate
 
 -- The shadow image used in the shadows.
 local SHADOW_IMAGE = "rbxassetid://1316045217"
@@ -187,35 +186,24 @@ local SHADOW_TWEEN_INFO = TweenInfo.new(
 	Enum.EasingStyle.Linear
 )
 
-local function CreateShadowsForElevation(elevation)
-	local elevationSettings = SHADOW_SETTINGS[elevation]
-	local shadows = {}
-
-	for key, settings in pairs(elevationSettings) do
-		local image = Roact.createElement("ImageLabel", {
-			Name = key;
-			BackgroundTransparency = 1;
-			Image = SHADOW_IMAGE;
-			ImageColor3 = Color3.new(0, 0, 0);
-			ImageTransparency = settings.Transparency;
-			Size = UDim2.new(1, settings.Blur, 1, settings.Blur);
-			AnchorPoint = Vector2.new(0.5, 0.5);
-			Position = UDim2.new(0.5, 0, 0.5, 0) + (settings.Offset or UDim2.new(0, 0, 0, 0));
-			ScaleType = Enum.ScaleType.Slice;
-			SliceCenter = Rect.new(10, 10, 118, 118);
-		})
-
-		shadows[key] = image
-	end
-
-	return shadows
-end
-
 local Shadow = Roact.PureComponent:extend("MaterialShadow")
 
 function Shadow:init(props)
 	assert(props.Elevation and SHADOW_SETTINGS[props.Elevation], "props.Elevation is invalid")
-	self._currentTweens = {}
+
+	local shadowProps = SHADOW_SETTINGS[props.Elevation]
+
+	self.state = {
+		_umbraTransparency = RoactAnimate.Value.new(shadowProps.Umbra.Transparency),
+		_umbraSize = RoactAnimate.Value.new(UDim2.new(1, shadowProps.Umbra.Blur, 1, shadowProps.Umbra.Blur)),
+		_umbraPosition = RoactAnimate.Value.new(UDim2.new(0.5, 0, 0.5, 0) + (shadowProps.Umbra.Offset or UDim2.new(0, 0, 0, 0))),
+		_penumbraTransparency = RoactAnimate.Value.new(shadowProps.Penumbra.Transparency),
+		_penumbraSize = RoactAnimate.Value.new(UDim2.new(1, shadowProps.Penumbra.Blur, 1, shadowProps.Penumbra.Blur)),
+		_penumbraPosition = RoactAnimate.Value.new(UDim2.new(0.5, 0, 0.5, 0) + (shadowProps.Penumbra.Offset or UDim2.new(0, 0, 0, 0))),
+		_ambientTransparency = RoactAnimate.Value.new(shadowProps.Ambient.Transparency),
+		_ambientSize = RoactAnimate.Value.new(UDim2.new(1, shadowProps.Ambient.Blur, 1, shadowProps.Ambient.Blur)),
+		_ambientPosition = RoactAnimate.Value.new(UDim2.new(0.5, 0, 0.5, 0) + (shadowProps.Ambient.Offset or UDim2.new(0, 0, 0, 0))),
+	}
 end
 
 function Shadow:render()
@@ -227,51 +215,57 @@ function Shadow:render()
 			self._rbx = rbx
 		end;
 		ZIndex = self.props.ZIndex or 1;
-	}, CreateShadowsForElevation(self.props.Elevation))
+	}, {
+		Umbra = Roact.createElement(RoactAnimate.ImageLabel, {
+			BackgroundTransparency = 1;
+			Image = SHADOW_IMAGE;
+			ImageColor3 = Color3.new(0, 0, 0);
+			ImageTransparency = self.state._umbraTransparency;
+			Size = self.state._umbraSize;
+			AnchorPoint = Vector2.new(0.5, 0.5);
+			Position = self.state._umbraPosition;
+			ScaleType = Enum.ScaleType.Slice;
+			SliceCenter = Rect.new(10, 10, 118, 118);
+		}),
+		Penumbra = Roact.createElement(RoactAnimate.ImageLabel, {
+			BackgroundTransparency = 1;
+			Image = SHADOW_IMAGE;
+			ImageColor3 = Color3.new(0, 0, 0);
+			ImageTransparency = self.state._penumbraTransparency;
+			Size = self.state._penumbraSize;
+			AnchorPoint = Vector2.new(0.5, 0.5);
+			Position = self.state._penumbraPosition;
+			ScaleType = Enum.ScaleType.Slice;
+			SliceCenter = Rect.new(10, 10, 118, 118);
+		}),
+		Ambient = Roact.createElement(RoactAnimate.ImageLabel, {
+			BackgroundTransparency = 1;
+			Image = SHADOW_IMAGE;
+			ImageColor3 = Color3.new(0, 0, 0);
+			ImageTransparency = self.state._ambientTransparency;
+			Size = self.state._ambientSize;
+			AnchorPoint = Vector2.new(0.5, 0.5);
+			Position = self.state._ambientPosition;
+			ScaleType = Enum.ScaleType.Slice;
+			SliceCenter = Rect.new(10, 10, 118, 118);
+		}),
+	})
 end
 
 function Shadow:willUpdate(nextProps, nextState)
-	-- Cancel the currently playing tweens.
-	local currentTweens = self._currentTweens
-	for _, tween in ipairs(currentTweens) do
-		tween:Cancel()
-	end
+	local shadowProps = SHADOW_SETTINGS[nextProps.Elevation]
 
-	-- New currentTweens table; will replace self._currentTweens
-	local newTweens = {}
-
-	-- Animate the umbra, penumbra, and ambient to their new values
-	local newShadowProps = SHADOW_SETTINGS[nextProps.Elevation]
-
-	table.insert(newTweens, TweenService:Create(self._rbx.Umbra, SHADOW_TWEEN_INFO, {
-		ImageTransparency = newShadowProps.Umbra.Transparency;
-		Size = UDim2.new(1, newShadowProps.Umbra.Blur, 1, newShadowProps.Umbra.Blur);
-		Position = UDim2.new(0.5, 0, 0.5, 0) + (newShadowProps.Umbra.Offset or UDim2.new(0, 0, 0, 0));
-	}))
-
-	table.insert(newTweens, TweenService:Create(self._rbx.Penumbra, SHADOW_TWEEN_INFO, {
-		ImageTransparency = newShadowProps.Penumbra.Transparency;
-		Size = UDim2.new(1, newShadowProps.Penumbra.Blur, 1, newShadowProps.Penumbra.Blur);
-		Position = UDim2.new(0.5, 0, 0.5, 0) + (newShadowProps.Penumbra.Offset or UDim2.new(0, 0, 0, 0));
-	}))
-
-	table.insert(newTweens, TweenService:Create(self._rbx.Ambient, SHADOW_TWEEN_INFO, {
-		ImageTransparency = newShadowProps.Ambient.Transparency;
-		Size = UDim2.new(1, newShadowProps.Ambient.Blur, 1, newShadowProps.Ambient.Blur);
-		Position = UDim2.new(0.5, 0, 0.5, 0) + (newShadowProps.Ambient.Offset or UDim2.new(0, 0, 0, 0));
-	}))
-
-	-- Play all the tweens at once!
-	for _, tween in ipairs(newTweens) do
-		tween:Play()
-	end
-
-	-- Bookkeeping!
-	self._currentTweens = newTweens
-
-	-- Yield until all the tweens are done; stops component from instantly updating.
-	-- Since the tween duration is the same for all the tweens we can just yield on one.
-	newTweens[1].Completed:Wait()
+	RoactAnimate.Parallel({
+		RoactAnimate(self.state._umbraTransparency, SHADOW_TWEEN_INFO, shadowProps.Umbra.Transparency),
+		RoactAnimate(self.state._umbraSize, SHADOW_TWEEN_INFO, UDim2.new(1, shadowProps.Umbra.Blur, 1, shadowProps.Umbra.Blur)),
+		RoactAnimate(self.state._umbraPosition, SHADOW_TWEEN_INFO, UDim2.new(0.5, 0, 0.5, 0) + (shadowProps.Umbra.Offset or UDim2.new(0, 0, 0, 0))),
+		RoactAnimate(self.state._penumbraTransparency, SHADOW_TWEEN_INFO, shadowProps.Penumbra.Transparency),
+		RoactAnimate(self.state._penumbraSize, SHADOW_TWEEN_INFO, UDim2.new(1, shadowProps.Penumbra.Blur, 1, shadowProps.Penumbra.Blur)),
+		RoactAnimate(self.state._penumbraPosition, SHADOW_TWEEN_INFO, UDim2.new(0.5, 0, 0.5, 0) + (shadowProps.Penumbra.Offset or UDim2.new(0, 0, 0, 0))),
+		RoactAnimate(self.state._ambientTransparency, SHADOW_TWEEN_INFO, shadowProps.Ambient.Transparency),
+		RoactAnimate(self.state._ambientSize, SHADOW_TWEEN_INFO, UDim2.new(1, shadowProps.Ambient.Blur, 1, shadowProps.Ambient.Blur)),
+		RoactAnimate(self.state._ambientPosition, SHADOW_TWEEN_INFO, UDim2.new(0.5, 0, 0.5, 0) + (shadowProps.Ambient.Offset or UDim2.new(0, 0, 0, 0))),
+	}):Start()
 end
 
 return Shadow
