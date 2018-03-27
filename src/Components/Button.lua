@@ -131,6 +131,12 @@ function Button:render()
 			end
 		}, self.props[Roact.Children]);
 
+		Children = Roact.createElement("Frame", {
+			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundTransparency = 1,
+			ZIndex = 4,
+		}, self.props[Roact.Children]),
+
 		Ink = Roact.createElement(Ink, {
 			ZIndex = 3;
 			Rippling = self.state._pressed;
