@@ -147,7 +147,7 @@ function Button:render()
 			ZIndex = 3;
 			Rippling = self.state._pressed;
 			Origin = self.state._pressPoint;
-			InkColor3 = self.props.Flat and ThemeAccessor.Get(self, "PrimaryColor") or Color3.new(1, 1, 1);
+			InkColor3 = self.props.InkColor3 or (self.props.Flat and ThemeAccessor.Get(self, "PrimaryColor") or Color3.new(1, 1, 1));
 			InkTransparency = 0.5;
 		});
 
