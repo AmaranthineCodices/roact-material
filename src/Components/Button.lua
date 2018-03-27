@@ -128,7 +128,13 @@ function Button:render()
 					Elevation = 2;
 					_mouseOver = false;
 				})
+			end,
+
+			[Roact.Event.MouseButton1Click] = function()
+				if self.props.onClicked then
+					self.props.onClicked()
 			end
+			end,
 		}, self.props[Roact.Children]);
 
 		Children = Roact.createElement("Frame", {
