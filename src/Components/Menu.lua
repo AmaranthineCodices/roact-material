@@ -122,6 +122,7 @@ function Menu:render()
         ZIndex = self.props.ZIndex,
         Size = self.state._size,
         Position = self.props.Position,
+        AnchorPoint = self.props.AnchorPoint,
     }, contents)
 end
 
