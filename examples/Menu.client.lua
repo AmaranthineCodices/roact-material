@@ -16,12 +16,12 @@ function ExampleComponent:render()
         Roact.createElement("ScreenGui", {
             ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
         }, {
-            Roact.createElement("Frame", {
+            Backing = Roact.createElement("Frame", {
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundColor3 = Color3.new(1, 1, 1),
                 BorderSizePixel = 0,
             }, {
-                Roact.createElement(RoactMaterial.Button, {
+                ToggleButton = Roact.createElement(RoactMaterial.Button, {
                     Text = "Open Menu",
                     Size = UDim2.new(0, 200, 0, 40),
                     Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -32,27 +32,26 @@ function ExampleComponent:render()
                             open = true,
                         })
                     end,
-                }),
-                Roact.createElement(RoactMaterial.Menu, {
-                    Width = UDim.new(0, 200),
-                    Open = self.state.open,
-                    Options = {
-                        "Test",
-                        "Test 2",
-                        RoactMaterial.Menu.Divider,
-                        "Test 3"
-                    },
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    ZIndex = 2,
+                }, {
+                    Menu = Roact.createElement(RoactMaterial.Menu, {
+                        Width = UDim.new(0, 200),
+                        Open = self.state.open,
+                        Options = {
+                            "Test",
+                            "Test 2",
+                            RoactMaterial.Menu.Divider,
+                            "Test 3"
+                        },
+                        ZIndex = 2,
 
-                    onOptionSelected = function(option)
-                        print(option)
-                        self:setState({
-                            open = false,
-                        })
-                    end,
-                })
+                        onOptionSelected = function(option)
+                            print(option)
+                            self:setState({
+                                open = false,
+                            })
+                        end,
+                    })
+                }),
             })
         })
     })
@@ -60,4 +59,4 @@ end
 
 local test = Roact.createElement(ExampleComponent)
 
-Roact.reify(test, game.Players.LocalPlayer:WaitForChild("PlayerGui"), "CheckboxExample")
+Roact.reify(test, game.Players.LocalPlayer:WaitForChild("PlayerGui"), "MenuExample")
