@@ -41,26 +41,6 @@ function Button:init(props)
 	self._lastInputEvent = tick()
 end
 
-function Button:didMount()
-	self._uisConnection = UserInputService.InputEnded:Connect(function(input, gameProcessed)
-		for _, allowed in ipairs(RIPPLE_TRIGGER_INPUT_TYPES) do
-			if input.UserInputType == allowed then
-				self:setState({
-					_pressed = false;
-				})
-
-				break
-			end
-		end
-	end)
-end
-
-function Button:willUnmount()
-	if self._uisConnection then
-		self._uisConnection:Disconnect()
-	end
-end
-
 function Button:willUpdate(nextProps, nextState)
 	local goalColor
 
@@ -114,7 +94,19 @@ function Button:render()
 						break
 					end
 				end
-			end;
+			end,
+
+			[Roact.Event.InputEnded] = function(rbx, input)
+				for _, allowed in ipairs(RIPPLE_TRIGGER_INPUT_TYPES) do
+					if input.UserInputType == allowed then
+						self:setState({
+							_pressed = false;
+						})
+
+						break
+					end
+				end
+			end,
 
 			[Roact.Event.MouseEnter] = function()
 				self:setState({
