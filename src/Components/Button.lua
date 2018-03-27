@@ -86,6 +86,7 @@ function Button:render()
 		AnchorPoint = self.props.AnchorPoint or Vector2.new(0, 0);
 		Size = self.props.Size or UDim2.new(0, 100, 0, 40);
 		ZIndex = self.props.ZIndex or 1;
+		LayoutOrder = self.props.LayoutOrder,
 	}, {
 		Roact.createElement(RoactAnimate.TextButton, {
 			AutoButtonColor = false;
