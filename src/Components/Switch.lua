@@ -40,8 +40,8 @@ function Switch:willUpdate(nextProps, nextState)
                 RoactAnimate.Prepare(self.state._rippleSize, UDim2.new(0, 0, 0, 0)),
                 RoactAnimate.Prepare(self.state._rippleTransparency, 0.6),
                 RoactAnimate.Prepare(self.state._rippleColor, newRippleColor),
-                RoactAnimate(self.state._rippleSize, TweenInfo.new(0.15), UDim2.new(1.75, 0, 1.75, 0)),
-                RoactAnimate(self.state._rippleTransparency, TweenInfo.new(0.15), 1)
+                RoactAnimate(self.state._rippleSize, TweenInfo.new(0.25, Enum.EasingStyle.Sine), UDim2.new(1.75, 0, 1.75, 0)),
+                RoactAnimate(self.state._rippleTransparency, TweenInfo.new(.08, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), 1)
             })
         }):Start()
     end
@@ -56,7 +56,9 @@ function Switch:render()
         ZIndex = self.props.ZIndex;
 
         [Roact.Event.MouseButton1Click] = function(rbx)
-            self.props.onChecked(not self.props.Checked)
+            if self.props.onChecked then
+                self.props.onChecked(not self.props.Checked)
+            end;
         end;
     }, {
         Track = c(RoactAnimate.ImageLabel, {

@@ -20,8 +20,14 @@ local test = Roact.createElement(RoactMaterial.ThemeProvider, {
             });
             Roact.createElement(RoactMaterial.RadioButton, {
                 Checked = true;
+                onClicked = function()
+					print('RadioButton clicked')
+                end;
             });
             Roact.createElement(RoactMaterial.RadioButton, {
+                onClicked = function()
+					print('RadioButton clicked')
+                end;
             });
         })
     })
