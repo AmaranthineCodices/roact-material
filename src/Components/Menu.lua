@@ -118,7 +118,7 @@ function Menu:render()
     end
 
     return e(Card, {
-        Elevation = 2,
+        Elevation = self.props.Open and 2 or 0,
         ZIndex = self.props.ZIndex,
         Size = self.state._size,
         Position = self.props.Position,
