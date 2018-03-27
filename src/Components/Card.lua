@@ -19,14 +19,14 @@ function Card:render()
         AnchorPoint = self.props.AnchorPoint,
         Position = self.props.Position,
     }, {
-        e(RoactAnimate.Frame, {
+        Container = e(RoactAnimate.Frame, {
             BackgroundColor3 = ThemeAccessor.Get(self, "BackgroundColor"),
             BorderSizePixel = 0,
             Size = UDim2.new(1, 0, 1, 0),
             ZIndex = 2,
             ClipsDescendants = true,
         }, self.props[Roact.Children]),
-        e(Shadow, {
+        Shadow = e(Shadow, {
             Elevation = self.props.Elevation,
             ZIndex = 1,
         })
