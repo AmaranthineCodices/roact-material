@@ -55,9 +55,35 @@ function Button:willUpdate(nextProps, nextState)
 	RoactAnimate(self.state._bgColor, COLOR_TWEEN_INFO, goalColor):Start()
 end
 
+function Button:_scheduleHitTest(rbx)
+	local timestamp = tick()
+	self._lastHitTest = timestamp
+
+	spawn(function()
+		if self._lastHitTest == timestamp then
+			local absolutePosition = rbx.AbsolutePosition
+			local absoluteSize = rbx.AbsoluteSize
+			local mousePosition = UserInputService:GetMouseLocation()
+			local bottomRight = absolutePosition + absoluteSize
+
+			if mousePosition.X < absolutePosition.X or mousePosition.Y < absolutePosition.Y or mousePosition.X > bottomRight.X or mousePosition.Y > bottomRight.Y then
+				print("out of bounds!")
+				self:setState({
+					_pressed = false,
+					_mouseOver = false,
+				})
+			end
+		end
+	end)
+end
+
 function Button:render()
 	local flat = self.props.Flat
 	local elevation = (flat and 0) or self.state.Elevation
+
+	local function hitTester(rbx)
+		self:_scheduleHitTest(rbx)
+	end
 
 	-- root is a dummy frame
 	return Roact.createElement("Frame", {
@@ -67,6 +93,9 @@ function Button:render()
 		Size = self.props.Size or UDim2.new(0, 100, 0, 40);
 		ZIndex = self.props.ZIndex or 1;
 		LayoutOrder = self.props.LayoutOrder,
+
+		[Roact.Change.AbsolutePosition] = hitTester,
+		[Roact.Change.AbsoluteSize] = hitTester,
 	}, {
 		Roact.createElement(RoactAnimate.TextButton, {
 			AutoButtonColor = false;
