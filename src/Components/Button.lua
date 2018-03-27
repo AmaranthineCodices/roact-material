@@ -67,7 +67,6 @@ function Button:_scheduleHitTest(rbx)
 			local bottomRight = absolutePosition + absoluteSize
 
 			if mousePosition.X < absolutePosition.X or mousePosition.Y < absolutePosition.Y or mousePosition.X > bottomRight.X or mousePosition.Y > bottomRight.Y then
-				print("out of bounds!")
 				self:setState({
 					_pressed = false,
 					_mouseOver = false,
