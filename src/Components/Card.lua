@@ -24,6 +24,7 @@ function Card:render()
             BorderSizePixel = 0,
             Size = UDim2.new(1, 0, 1, 0),
             ZIndex = 2,
+            ClipsDescendants = true,
         }, self.props[Roact.Children]),
         e(Shadow, {
             Elevation = self.props.Elevation,
