@@ -56,42 +56,8 @@ function Menu:render()
     })
 
     for index, option in ipairs(self.props.Options) do
-        if typeof(option) == "string" then
-            contents["Option_"..option] = e(Button, {
-                Flat = true,
-                Size = UDim2.new(1, 0, 0, 32),
-                Text = "",
-                LayoutOrder = index,
-            }, {
-                e(TextView, {
-                    Class = "Body1",
-                    Text = option,
-                    Size = UDim2.new(1, -24, 1, 0),
-                    Position = UDim2.new(0, 24, 0, 0),
-                    TextXAlignment = Enum.TextXAlignment.Left,
-                })
-            })
-        elseif typeof(option) == "table" then
-            local content = option.Content
-            local key = option.Key or tostring(content)
-
-            if typeof(content) == "string" then
-                content = e(TextView, {
-                    Class = "Body1",
-                    Text = content,
-                    Size = UDim2.new(1, -24, 1, 0),
-                    TextXAlignment = Enum.TextXAlignment.Left,
-                })
-            end
-
-            contents["Option_"..key] = e(Button, {
-                Flat = true,
-                Size = UDim2.new(1, 0, 0, 32),
-                Text = "",
-                LayoutOrder = index,
-            }, { content })
-        elseif option == Menu.Divider then
-            table.insert(contents, e("Frame", {
+        if option == Menu.Divider then
+            contents["Divider_"..index] = e("Frame", {
                 Size = UDim2.new(1, 0, 0, 7),
                 LayoutOrder = index,
                 BackgroundTransparency = 1,
@@ -104,7 +70,50 @@ function Menu:render()
                     BackgroundColor3 = ThemeAccessor.Get(self, "InverseBackgroundColor"),
                     BorderSizePixel = 0,
                 })
-            }))
+            })
+        else
+            local buttonContent, key
+
+            if typeof(option) == "string" then
+                key = option
+                buttonContent = {
+                e(TextView, {
+                    Class = "Body1",
+                    Text = option,
+                    Size = UDim2.new(1, -24, 1, 0),
+                    Position = UDim2.new(0, 24, 0, 0),
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                })
+                }
+        elseif typeof(option) == "table" then
+                local optionContent = option.Content
+                key = option.Key or tostring(optionContent)
+
+                if typeof(optionContent) == "string" then
+                    buttonContent = e(TextView, {
+                    Class = "Body1",
+                        Text = optionContent,
+                    Size = UDim2.new(1, -24, 1, 0),
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                })
+                else
+                    buttonContent = optionContent
+                end
+            end
+
+            contents["Option_"..key] = e(Button, {
+                Flat = true,
+                Size = UDim2.new(1, 0, 0, 32),
+                Text = "",
+                LayoutOrder = index,
+                InkColor3 = Color3.new(0.6, 0.6, 0.6),
+                HoverColor3 = Color3.new(0.8, 0.8, 0.8),
+                PressColor3 = Color3.new(0.7, 0.7, 0.7),
+
+                onClicked = function()
+                    self.props.onOptionSelected(option)
+                end,
+            }, buttonContent)
         end
     end
 
