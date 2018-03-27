@@ -29,7 +29,7 @@ function ExampleComponent:render()
 
                     onClicked = function(newValue)
                         self:setState({
-                            open = not self.state.open,
+                            open = true,
                         })
                     end,
                 }),
@@ -43,7 +43,15 @@ function ExampleComponent:render()
                         "Test 3"
                     },
                     Position = UDim2.new(0.5, 0, 0.5, 0),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
                     ZIndex = 2,
+
+                    onOptionSelected = function(option)
+                        print(option)
+                        self:setState({
+                            open = false,
+                        })
+                    end,
                 })
             })
         })
