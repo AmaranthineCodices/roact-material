@@ -133,7 +133,7 @@ function Button:render()
 			[Roact.Event.MouseButton1Click] = function()
 				if self.props.onClicked then
 					self.props.onClicked()
-			end
+				end
 			end,
 		}, self.props[Roact.Children]);
 
