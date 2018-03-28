@@ -59,6 +59,9 @@ function Button:_scheduleHitTest(rbx)
 	local timestamp = tick()
 	self._lastHitTest = timestamp
 
+	-- Spawn the function in a new thread.
+	-- This means that visuals will be inaccurate for a frame (or possibly more), but
+	-- also means that we won't throw if the hit-test somehow executes in `render`.
 	spawn(function()
 		if self._lastHitTest == timestamp then
 			local absolutePosition = rbx.AbsolutePosition
