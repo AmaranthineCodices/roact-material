@@ -1,3 +1,7 @@
+# Attention: Deprecated
+
+This repository is no longer maintained. The original README is below.
+
 # roact-material
 [Material design](https://material.io/) on Roblox, powered by [Roact](https://github.com/Roblox/Roact)!
 
